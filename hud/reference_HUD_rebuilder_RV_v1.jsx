@@ -439,9 +439,12 @@
         layer.name = "REFERENCE_GUIDE";
         fitLayerToComp(layer, comp);
         layer.property("ADBE Transform Group").property("ADBE Opacity").setValue(opacity);
-        layer.guideLayer = true;
+        try {
+            layer.moveToEnd();
+        } catch (ignoredMove) {
+        }
         layer.locked = true;
-        layer.moveToEnd();
+        layer.guideLayer = true;
         return layer;
     }
 
