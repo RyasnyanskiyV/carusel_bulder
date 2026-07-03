@@ -87,7 +87,18 @@ def make_foreground_mask(
         )
 
     if np.any(mask):
-        fg = rgb[mask].mean(axis=0)
+        fg_pixels = rgb[mask]
+        fg_luma = (
+            fg_pixels[:, 0] * 0.2126
+            + fg_pixels[:, 1] * 0.7152
+            + fg_pixels[:, 2] * 0.0722
+        )
+        bright_cutoff = np.percentile(fg_luma, 70)
+        bright_pixels = fg_pixels[fg_luma >= bright_cutoff]
+        if bright_pixels.size:
+            fg = bright_pixels.mean(axis=0)
+        else:
+            fg = fg_pixels.mean(axis=0)
     else:
         fg = np.array([1.0, 1.0, 1.0], dtype=np.float32)
     return mask, (float(fg[0]), float(fg[1]), float(fg[2])), (

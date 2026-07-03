@@ -196,14 +196,14 @@
             return input;
         }
 
-        var guideOpacityInput = addRow("Guide opacity %:", "30", 6);
+        var guideOpacityInput = addRow("Guide opacity %:", "60", 6);
         var thresholdInput = addRow("Foreground threshold:", "0.055", 7);
         var minLengthInput = addRow("Min line length px:", "42", 7);
         var minRatioInput = addRow("Line ratio:", "3.5", 7);
         var mergeGapInput = addRow("Merge gap px:", "8", 7);
         var maxLinesInput = addRow("Max lines:", "1200", 8);
         var strokeScaleInput = addRow("Stroke width scale:", "1.0", 7);
-        var strokeColorInput = addRow("Line color HEX / auto:", "auto", 10);
+        var strokeColorInput = addRow("Line color HEX / auto:", "#AAB0A2", 10);
 
         var manualPanel = win.add("panel", undefined, "Editable text (optional)");
         manualPanel.orientation = "column";
@@ -334,21 +334,28 @@
         var group = root.addProperty("ADBE Vector Group");
         group.name = "hud_lines";
         var contents = group.property("ADBE Vectors Group");
-        var stroke = contents.addProperty("ADBE Vector Graphic - Stroke");
-        stroke.property("ADBE Vector Stroke Color").setValue(color);
-        stroke.property("ADBE Vector Stroke Width").setValue(strokeWidth);
+        return {
+            layer: layer,
+            contents: contents,
+            count: 0,
+            color: color,
+            strokeWidth: strokeWidth,
+            finalized: false
+        };
+    }
+
+    function finalizeLineLayer(lineLayer) {
+        if (!lineLayer || lineLayer.finalized || lineLayer.count <= 0) return;
+        var stroke = lineLayer.contents.addProperty("ADBE Vector Graphic - Stroke");
+        stroke.property("ADBE Vector Stroke Color").setValue(lineLayer.color);
+        stroke.property("ADBE Vector Stroke Width").setValue(lineLayer.strokeWidth);
         stroke.property("ADBE Vector Stroke Opacity").setValue(100);
         try {
             stroke.property("ADBE Vector Stroke Line Cap").setValue(1);
             stroke.property("ADBE Vector Stroke Line Join").setValue(1);
         } catch (ignored) {
         }
-
-        return {
-            layer: layer,
-            contents: contents,
-            count: 0
-        };
+        lineLayer.finalized = true;
     }
 
     function addPathToLineLayer(lineLayer, line) {
@@ -365,17 +372,20 @@
 
     function buildLineLayers(comp, lines, color, strokeScale, progress) {
         var buckets = {};
+        var bucketList = [];
         var layerIndex = 1;
         for (var i = 0; i < lines.length; i++) {
             var width = lineBucketWidth(lines[i], strokeScale);
             var key = String(width);
             if (!buckets[key] || buckets[key].count >= LINES_PER_LAYER) {
+                finalizeLineLayer(buckets[key]);
                 buckets[key] = createLineLayer(
                     comp,
                     "hud_lines_w" + width + "_" + ("000" + layerIndex).slice(-3),
                     color,
                     width
                 );
+                bucketList.push(buckets[key]);
                 layerIndex++;
             }
             addPathToLineLayer(buckets[key], lines[i]);
@@ -383,6 +393,9 @@
                 progress.text.text = "Creating HUD lines: " + (i + 1) + " / " + lines.length;
                 progress.win.update();
             }
+        }
+        for (var b = 0; b < bucketList.length; b++) {
+            finalizeLineLayer(bucketList[b]);
         }
     }
 
