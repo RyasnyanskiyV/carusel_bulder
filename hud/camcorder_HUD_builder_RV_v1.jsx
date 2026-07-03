@@ -228,21 +228,82 @@
         path.setValue(shape);
     }
 
+    function addPathToContents(contents, vertices, inTangents, outTangents, closed) {
+        var pathGroup = contents.addProperty("ADBE Vector Shape - Group");
+        var path = pathGroup.property("ADBE Vector Shape");
+        var shape = new Shape();
+        shape.vertices = vertices;
+        shape.inTangents = inTangents;
+        shape.outTangents = outTangents;
+        shape.closed = closed;
+        path.setValue(shape);
+        return pathGroup;
+    }
+
     function addRectToContents(contents, x, y, w, h, roundness) {
-        var rect = contents.addProperty("ADBE Vector Shape - Rect");
-        rect.property("ADBE Vector Rect Size").setValue([w, h]);
-        rect.property("ADBE Vector Rect Position").setValue([x + w * 0.5, y + h * 0.5]);
-        if (roundness !== undefined) {
-            rect.property("ADBE Vector Rect Roundness").setValue(roundness);
+        // Bezier paths are more stable than parametric Rect shapes across AE 22+.
+        var r = Math.max(0, Math.min(roundness || 0, Math.min(w, h) * 0.5));
+        if (r <= 0) {
+            return addPathToContents(
+                contents,
+                [[x, y], [x + w, y], [x + w, y + h], [x, y + h]],
+                [[0, 0], [0, 0], [0, 0], [0, 0]],
+                [[0, 0], [0, 0], [0, 0], [0, 0]],
+                true
+            );
         }
-        return rect;
+
+        var k = 0.5522847498;
+        return addPathToContents(
+            contents,
+            [
+                [x + r, y],
+                [x + w - r, y],
+                [x + w, y + r],
+                [x + w, y + h - r],
+                [x + w - r, y + h],
+                [x + r, y + h],
+                [x, y + h - r],
+                [x, y + r]
+            ],
+            [
+                [0, 0],
+                [0, 0],
+                [0, -r * k],
+                [0, 0],
+                [r * k, 0],
+                [0, 0],
+                [0, r * k],
+                [0, 0]
+            ],
+            [
+                [0, 0],
+                [r * k, 0],
+                [0, 0],
+                [0, r * k],
+                [0, 0],
+                [-r * k, 0],
+                [0, 0],
+                [0, -r * k]
+            ],
+            true
+        );
     }
 
     function addEllipseToContents(contents, x, y, w, h) {
-        var ellipse = contents.addProperty("ADBE Vector Shape - Ellipse");
-        ellipse.property("ADBE Vector Ellipse Size").setValue([w, h]);
-        ellipse.property("ADBE Vector Ellipse Position").setValue([x + w * 0.5, y + h * 0.5]);
-        return ellipse;
+        // Bezier ellipse avoids parametric Ellipse compatibility issues.
+        var cx = x + w * 0.5;
+        var cy = y + h * 0.5;
+        var rx = w * 0.5;
+        var ry = h * 0.5;
+        var k = 0.5522847498;
+        return addPathToContents(
+            contents,
+            [[cx, cy - ry], [cx + rx, cy], [cx, cy + ry], [cx - rx, cy]],
+            [[-rx * k, 0], [0, -ry * k], [rx * k, 0], [0, ry * k]],
+            [[rx * k, 0], [0, ry * k], [-rx * k, 0], [0, -ry * k]],
+            true
+        );
     }
 
     function firstColorProperty(group) {
@@ -409,25 +470,27 @@
         addText(comp, name + "_label", name, 2560, y + 60, 70, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 18);
 
         var layer = makeShapeLayer(comp, "HUD_" + name + "_meter");
-        var white = addGroup(layer, name + "_white_bars");
-        var yellow = addGroup(layer, name + "_yellow_bars");
-        var red = addGroup(layer, name + "_red_bar");
-        var dashes = addGroup(layer, name + "_dashes");
-
         var x0 = 2760;
         var bw = 30;
         var bh = 70;
         var gap = 18;
+
+        var white = addGroup(layer, name + "_white_bars");
         for (var i = 0; i < 12; i++) {
             addRectToContents(white, x0 + i * (bw + gap), y, bw, bh, 0);
         }
         addFill(white, COLOR_WHITE, 100);
+
+        var yellow = addGroup(layer, name + "_yellow_bars");
         addRectToContents(yellow, x0 + 12 * (bw + gap), y, bw, bh, 0);
         addRectToContents(yellow, x0 + 13 * (bw + gap), y, bw, bh, 0);
         addFill(yellow, COLOR_YELLOW, 100);
+
+        var red = addGroup(layer, name + "_red_bar");
         addRectToContents(red, x0 + 14 * (bw + gap), y, bw, bh, 0);
         addFill(red, COLOR_RED, 100);
 
+        var dashes = addGroup(layer, name + "_dashes");
         var dx = x0 + 15 * (bw + gap) + 12;
         addLineToContents(dashes, dx, y + bh * 0.5, dx + 45, y + bh * 0.5);
         addLineToContents(dashes, dx + 65, y + bh * 0.5, dx + 110, y + bh * 0.5);
@@ -458,14 +521,13 @@
     function drawChromaticHints(comp) {
         var layer = makeShapeLayer(comp, "HUD_rgb_edge_hints");
         var red = addGroup(layer, "red_offset");
-        var cyan = addGroup(layer, "cyan_offset");
-
         addLineToContents(red, 153, 83, 153, 397);
         addLineToContents(red, 153, COMP_H - 462, 153, COMP_H - 147);
+        addStroke(red, COLOR_RED, 2, 30);
 
+        var cyan = addGroup(layer, "cyan_offset");
         addLineToContents(cyan, COMP_W - 147, 83, COMP_W - 147, 397);
         addLineToContents(cyan, COMP_W - 147, COMP_H - 462, COMP_W - 147, COMP_H - 147);
-        addStroke(red, COLOR_RED, 2, 30);
         addStroke(cyan, COLOR_DIM, 2, 35);
     }
 
