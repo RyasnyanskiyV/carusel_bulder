@@ -328,7 +328,6 @@
     function drawFrameCorners(comp) {
         var layer = makeShapeLayer(comp, "HUD_frame_corners");
         var c = addGroup(layer, "corners");
-        addStroke(c, COLOR_WHITE, LINE_W, 100);
 
         var m = 150;
         var yTop = 80;
@@ -347,6 +346,7 @@
 
         addLineToContents(c, COMP_W - m, yBottom - vLen, COMP_W - m, yBottom);
         addLineToContents(c, COMP_W - m - hLen, yBottom, COMP_W - m, yBottom);
+        addStroke(c, COLOR_WHITE, LINE_W, 100);
     }
 
     function drawRecBlock(comp) {
@@ -362,14 +362,13 @@
 
         var line = makeShapeLayer(comp, "HUD_sp_underline");
         var c = addGroup(line, "underline");
-        addStroke(c, COLOR_WHITE, THIN_W, 100);
         addLineToContents(c, 250, 630, 375, 630);
+        addStroke(c, COLOR_WHITE, THIN_W, 100);
     }
 
     function drawBatteryBlock(comp) {
         var layer = makeShapeLayer(comp, "HUD_battery");
         var c = addGroup(layer, "battery");
-        addStroke(c, COLOR_WHITE, LINE_W, 100);
 
         var x = 3300;
         var y = 180;
@@ -377,12 +376,13 @@
         var h = 95;
         addRectToContents(c, x, y, w, h, 0);
         addRectToContents(c, x - 22, y + 28, 22, 38, 0);
+        addStroke(c, COLOR_WHITE, LINE_W, 100);
 
         var fillGroup = addGroup(layer, "battery_cells");
-        addFill(fillGroup, COLOR_WHITE, 100);
         for (var i = 0; i < 4; i++) {
             addRectToContents(fillGroup, x + 78 + i * 52, y + 20, 34, 55, 0);
         }
+        addFill(fillGroup, COLOR_WHITE, 100);
 
         addText(comp, "HUD_68min", "68min", 3060, 450, 88, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 18);
         drawTapeIcon(comp);
@@ -391,11 +391,11 @@
     function drawTapeIcon(comp) {
         var layer = makeShapeLayer(comp, "HUD_tape_icon");
         var c = addGroup(layer, "tape");
-        addStroke(c, COLOR_WHITE, THIN_W, 100);
         addRectToContents(c, 3450, 355, 132, 78, 0);
         addEllipseToContents(c, 3485, 376, 36, 36);
         addEllipseToContents(c, 3540, 376, 36, 36);
         addLineToContents(c, 3520, 394, 3540, 394);
+        addStroke(c, COLOR_WHITE, THIN_W, 100);
     }
 
     function drawLeftSettings(comp) {
@@ -410,13 +410,9 @@
 
         var layer = makeShapeLayer(comp, "HUD_" + name + "_meter");
         var white = addGroup(layer, name + "_white_bars");
-        addFill(white, COLOR_WHITE, 100);
         var yellow = addGroup(layer, name + "_yellow_bars");
-        addFill(yellow, COLOR_YELLOW, 100);
         var red = addGroup(layer, name + "_red_bar");
-        addFill(red, COLOR_RED, 100);
         var dashes = addGroup(layer, name + "_dashes");
-        addStroke(dashes, COLOR_WHITE, THIN_W, 100);
 
         var x0 = 2760;
         var bw = 30;
@@ -425,13 +421,17 @@
         for (var i = 0; i < 12; i++) {
             addRectToContents(white, x0 + i * (bw + gap), y, bw, bh, 0);
         }
+        addFill(white, COLOR_WHITE, 100);
         addRectToContents(yellow, x0 + 12 * (bw + gap), y, bw, bh, 0);
         addRectToContents(yellow, x0 + 13 * (bw + gap), y, bw, bh, 0);
+        addFill(yellow, COLOR_YELLOW, 100);
         addRectToContents(red, x0 + 14 * (bw + gap), y, bw, bh, 0);
+        addFill(red, COLOR_RED, 100);
 
         var dx = x0 + 15 * (bw + gap) + 12;
         addLineToContents(dashes, dx, y + bh * 0.5, dx + 45, y + bh * 0.5);
         addLineToContents(dashes, dx + 65, y + bh * 0.5, dx + 110, y + bh * 0.5);
+        addStroke(dashes, COLOR_WHITE, THIN_W, 100);
     }
 
     function drawAudioMeters(comp) {
@@ -447,25 +447,26 @@
     function drawVhsScanNoise(comp) {
         var layer = makeShapeLayer(comp, "HUD_small_scanline_breaks");
         var c = addGroup(layer, "breaks");
-        addStroke(c, COLOR_DIM, 2, 36);
         var ys = [74, 82, 1480, 1532, 1990, 2056];
         for (var i = 0; i < ys.length; i++) {
             addLineToContents(c, 175, ys[i], 455, ys[i] + (i % 2));
             addLineToContents(c, COMP_W - 455, ys[i], COMP_W - 175, ys[i] + (i % 2));
         }
+        addStroke(c, COLOR_DIM, 2, 36);
     }
 
     function drawChromaticHints(comp) {
         var layer = makeShapeLayer(comp, "HUD_rgb_edge_hints");
         var red = addGroup(layer, "red_offset");
-        addStroke(red, COLOR_RED, 2, 30);
         var cyan = addGroup(layer, "cyan_offset");
-        addStroke(cyan, COLOR_DIM, 2, 35);
 
         addLineToContents(red, 153, 83, 153, 397);
-        addLineToContents(cyan, COMP_W - 147, 83, COMP_W - 147, 397);
         addLineToContents(red, 153, COMP_H - 462, 153, COMP_H - 147);
+
+        addLineToContents(cyan, COMP_W - 147, 83, COMP_W - 147, 397);
         addLineToContents(cyan, COMP_W - 147, COMP_H - 462, COMP_W - 147, COMP_H - 147);
+        addStroke(red, COLOR_RED, 2, 30);
+        addStroke(cyan, COLOR_DIM, 2, 35);
     }
 
     function buildHUD(comp) {
