@@ -8,6 +8,7 @@ Adobe After Effects ExtendScript tools for carousel rigs.
 - `text/carusel_builder_RV_text_v8_3.jsx` - standalone text-block carousel. It creates only the requested number of text blocks and keeps text radius in `text_control`.
 - `cardsflow/cardsflow_builder_RV_v1_5.jsx` - CardsFlow-style rig with camera presets, 60 second default duration, and AE 2022-compatible update behavior.
 - `hud/reference_HUD_rebuilder_RV_v1.jsx` - HUD/UI rebuild helper. It keeps the reference as a guide layer, detects clean horizontal/vertical lines via `hud/rv_hud_line_detector.py`, and creates lightweight AE shape strokes.
+- `hud/dji_HUD_builder_RV_v1.jsx` - procedural DJI-style HUD builder. It creates a clean 3840 x 2160 native AE HUD from shape and text layers instead of tracing pixels.
 
 ## Compatibility
 
@@ -21,6 +22,7 @@ Open the `.jsx` file in After Effects with `File > Scripts > Run Script File...`
 Use the photo script for image/video cards and the text script for independent rotating text blocks.
 Use the CardsFlow script for the separate flow-style card layout.
 Use the HUD rebuilder when automatic pixel vectorization looks too rough or too heavy.
+Use the DJI HUD builder for the cleanest result when the target is the DJI/drone overlay style.
 
 ## Local status
 
