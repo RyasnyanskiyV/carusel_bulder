@@ -18,14 +18,9 @@
     var COMP_BASE = "CAMCORDER_HUD_MAIN";
     var CTRL_NAME = "HUD_CONTROL";
 
-    // AE font names vary by machine. The script tries these in order.
-    var HUD_FONT_CANDIDATES = [
-        "OCR A Extended",
-        "OCRAStd",
-        "OCR-A BT",
-        "Consolas",
-        "Courier New"
-    ];
+    // Text is drawn as native shape pixels, so it does not depend on installed fonts.
+    var PIXEL_FONT_ROWS = 7;
+    var PIXEL_FILL = 0.82;
 
     var FX_HUD_SCALE = "HUD Scale (%)";
     var FX_GLOBAL_OPACITY = "HUD Opacity (%)";
@@ -306,63 +301,96 @@
         );
     }
 
-    function firstColorProperty(group) {
-        for (var i = 1; i <= group.numProperties; i++) {
-            var prop = group.property(i);
-            try {
-                if (prop.propertyValueType === PropertyValueType.COLOR) return prop;
-            } catch (ignored) {
-            }
-        }
-        return null;
+    var PIXEL_FONT = {
+        "A": ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
+        "B": ["11110", "10001", "10001", "11110", "10001", "10001", "11110"],
+        "C": ["01111", "10000", "10000", "10000", "10000", "10000", "01111"],
+        "D": ["11110", "10001", "10001", "10001", "10001", "10001", "11110"],
+        "E": ["11111", "10000", "10000", "11110", "10000", "10000", "11111"],
+        "H": ["10001", "10001", "10001", "11111", "10001", "10001", "10001"],
+        "I": ["11111", "00100", "00100", "00100", "00100", "00100", "11111"],
+        "L": ["10000", "10000", "10000", "10000", "10000", "10000", "11111"],
+        "M": ["10001", "11011", "10101", "10101", "10001", "10001", "10001"],
+        "N": ["10001", "11001", "10101", "10011", "10001", "10001", "10001"],
+        "O": ["01110", "10001", "10001", "10001", "10001", "10001", "01110"],
+        "P": ["11110", "10001", "10001", "11110", "10000", "10000", "10000"],
+        "R": ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
+        "S": ["01111", "10000", "10000", "01110", "00001", "00001", "11110"],
+        "T": ["11111", "00100", "00100", "00100", "00100", "00100", "00100"],
+        "W": ["10001", "10001", "10001", "10101", "10101", "11011", "10001"],
+        "Y": ["10001", "01010", "00100", "00100", "00100", "00100", "00100"],
+        "0": ["01110", "10001", "10011", "10101", "11001", "10001", "01110"],
+        "1": ["00100", "01100", "00100", "00100", "00100", "00100", "01110"],
+        "2": ["01110", "10001", "00001", "00010", "00100", "01000", "11111"],
+        "3": ["11110", "00001", "00001", "01110", "00001", "00001", "11110"],
+        "4": ["00010", "00110", "01010", "10010", "11111", "00010", "00010"],
+        "5": ["11111", "10000", "10000", "11110", "00001", "00001", "11110"],
+        "6": ["01110", "10000", "10000", "11110", "10001", "10001", "01110"],
+        "7": ["11111", "00001", "00010", "00100", "01000", "01000", "01000"],
+        "8": ["01110", "10001", "10001", "01110", "10001", "10001", "01110"],
+        "9": ["01110", "10001", "10001", "01111", "00001", "00001", "01110"],
+        ":": ["00000", "00100", "00100", "00000", "00100", "00100", "00000"],
+        "-": ["00000", "00000", "00000", "11111", "00000", "00000", "00000"],
+        " ": ["00000", "00000", "00000", "00000", "00000", "00000", "00000"],
+        "m": ["00000", "00000", "11010", "10101", "10101", "10101", "10101"],
+        "i": ["00100", "00000", "01100", "00100", "00100", "00100", "01110"],
+        "n": ["00000", "00000", "11110", "10001", "10001", "10001", "10001"],
+        "?": ["11111", "00001", "00010", "00100", "00000", "00100", "00000"]
+    };
+
+    function pixelPattern(ch) {
+        if (PIXEL_FONT[ch]) return PIXEL_FONT[ch];
+        var upper = String(ch).toUpperCase();
+        return PIXEL_FONT[upper] || PIXEL_FONT["?"];
     }
 
-    function applyFont(doc) {
-        for (var i = 0; i < HUD_FONT_CANDIDATES.length; i++) {
-            try {
-                doc.font = HUD_FONT_CANDIDATES[i];
-                return;
-            } catch (ignored) {
-            }
+    function measurePixelText(text, cell, letterGap) {
+        if (!text || text.length === 0) return 0;
+        var w = 0;
+        for (var i = 0; i < text.length; i++) {
+            var pattern = pixelPattern(text.charAt(i));
+            w += pattern[0].length * cell;
+            if (i < text.length - 1) w += letterGap;
         }
-    }
-
-    function applyTextColorControl(layer, color) {
-        var colorControl = colorControlName(color) || FX_WHITE_COLOR;
-        try {
-            var fill = layer.property("ADBE Effect Parade").addProperty("ADBE Fill");
-            fill.name = "HUD Text Color";
-            var colorProp = firstColorProperty(fill);
-            if (colorProp) {
-                colorProp.setValue(color);
-                setExpression(colorProp, colorExpr(colorControl));
-            }
-        } catch (ignored) {
-            // The baked TextDocument color remains if Fill is unavailable.
-        }
+        return w;
     }
 
     function addText(comp, name, text, x, y, size, color, align, tracking) {
-        var layer = comp.layers.addText(text);
-        layer.name = name;
+        var layer = makeShapeLayer(comp, name);
         layer.label = 2;
-        var textProp = layer.property("ADBE Text Properties").property("ADBE Text Document");
-        var doc = textProp.value;
-        doc.text = text;
-        doc.fontSize = size;
-        doc.fillColor = color;
-        doc.applyFill = true;
-        doc.applyStroke = false;
-        doc.justification = align || ParagraphJustification.LEFT_JUSTIFY;
-        try {
-            doc.tracking = tracking === undefined ? 30 : tracking;
-        } catch (ignoredTracking) {
+        var contents = addGroup(layer, "pixel_text");
+        var cell = size / PIXEL_FONT_ROWS;
+        var block = cell * PIXEL_FILL;
+        var letterGap = tracking === undefined ? cell * 0.42 : tracking * 0.18;
+        var drawX = x;
+        var drawY = y - size;
+
+        var textWidth = measurePixelText(text, cell, letterGap);
+        if (align === ParagraphJustification.CENTER_JUSTIFY) {
+            drawX -= textWidth * 0.5;
+        } else if (align === ParagraphJustification.RIGHT_JUSTIFY) {
+            drawX -= textWidth;
         }
-        applyFont(doc);
-        textProp.setValue(doc);
-        layer.property("ADBE Transform Group").property("ADBE Position").setValue([x, y]);
-        applyTextColorControl(layer, color);
-        registerHudLayer(layer);
+
+        for (var i = 0; i < text.length; i++) {
+            var pattern = pixelPattern(text.charAt(i));
+            for (var row = 0; row < pattern.length; row++) {
+                for (var col = 0; col < pattern[row].length; col++) {
+                    if (pattern[row].charAt(col) === "1") {
+                        addRectToContents(
+                            contents,
+                            drawX + col * cell,
+                            drawY + row * cell,
+                            block,
+                            block,
+                            0
+                        );
+                    }
+                }
+            }
+            drawX += pattern[0].length * cell + letterGap;
+        }
+        addFill(contents, color, 100);
         return layer;
     }
 
