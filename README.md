@@ -9,6 +9,7 @@ Adobe After Effects ExtendScript tools for carousel rigs.
 - `cardsflow/cardsflow_builder_RV_v1_5.jsx` - CardsFlow-style rig with camera presets, 60 second default duration, and AE 2022-compatible update behavior.
 - `hud/reference_HUD_rebuilder_RV_v1.jsx` - HUD/UI rebuild helper. It keeps the reference as a guide layer, detects clean horizontal/vertical lines via `hud/rv_hud_line_detector.py`, and creates lightweight AE shape strokes.
 - `hud/dji_HUD_builder_RV_v1.jsx` - procedural DJI-style HUD builder. It creates a clean 3840 x 2160 native AE HUD from shape and text layers instead of tracing pixels.
+- `hud/dji_HUD_builder_RV_v1_1.jsx` - controlled procedural DJI HUD. Adds `HUD_CONTROL`, global HUD scale/opacity, guide opacity, editable colors, and a single `HUD_FONT` constant.
 
 ## Compatibility
 
