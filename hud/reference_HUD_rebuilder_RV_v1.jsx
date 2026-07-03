@@ -440,11 +440,18 @@
         fitLayerToComp(layer, comp);
         layer.property("ADBE Transform Group").property("ADBE Opacity").setValue(opacity);
         try {
+            layer.locked = false;
+        } catch (ignoredUnlock) {
+        }
+        try {
             layer.moveToEnd();
         } catch (ignoredMove) {
         }
+        try {
+            layer.guideLayer = true;
+        } catch (ignoredGuide) {
+        }
         layer.locked = true;
-        layer.guideLayer = true;
         return layer;
     }
 
