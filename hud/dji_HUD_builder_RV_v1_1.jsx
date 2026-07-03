@@ -112,6 +112,34 @@
         setExpression(tr.property("ADBE Opacity"), globalOpacityExpr());
     }
 
+    function firstColorProperty(group) {
+        for (var i = 1; i <= group.numProperties; i++) {
+            var prop = group.property(i);
+            try {
+                if (prop.propertyValueType === PropertyValueType.COLOR) {
+                    return prop;
+                }
+            } catch (ignored) {
+            }
+        }
+        return null;
+    }
+
+    function applyTextColorControl(layer, color) {
+        var colorControl = colorControlName(color) || FX_TEXT_COLOR;
+        try {
+            var fill = layer.property("ADBE Effect Parade").addProperty("ADBE Fill");
+            fill.name = "HUD Text Color";
+            var colorProp = firstColorProperty(fill);
+            if (colorProp) {
+                colorProp.setValue(color);
+                setExpression(colorProp, colorExpr(colorControl));
+            }
+        } catch (ignored) {
+            // If the Fill effect is unavailable, the TextDocument color remains baked in.
+        }
+    }
+
     function addSlider(fx, name, value) {
         var item = fx.addProperty("ADBE Slider Control");
         item.name = name;
@@ -276,11 +304,7 @@
         }
         textProp.setValue(doc);
         layer.property("ADBE Transform Group").property("ADBE Position").setValue([x, y]);
-        var colorControl = colorControlName(color) || FX_TEXT_COLOR;
-        setExpression(
-            textProp,
-            'var c = ' + controlExpr(colorControl, "Color") + ';\ntext.sourceText.style.setFillColor(c);'
-        );
+        applyTextColorControl(layer, color);
         registerHudLayer(layer);
         return layer;
     }
