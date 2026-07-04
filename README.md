@@ -11,6 +11,7 @@ Adobe After Effects ExtendScript tools for carousel rigs.
 - `hud/dji_HUD_builder_RV_v1.jsx` - procedural DJI-style HUD builder. It creates a clean 3840 x 2160 native AE HUD from shape and text layers instead of tracing pixels.
 - `hud/dji_HUD_builder_RV_v1_1.jsx` - controlled procedural DJI HUD. Adds `HUD_CONTROL`, global HUD scale/opacity, guide opacity, editable colors, and a single `HUD_FONT` constant.
 - `hud/camcorder_HUD_builder_RV_v1.jsx` - procedural VHS/Hi8 camcorder HUD overlay with REC, battery, timecode, corner marks, CH1/CH2 meters, editable controls, and built-in shape-pixel text.
+- `hud/svhs_camcorder_HUD_builder_RV_v1.jsx` - procedural minimal S-VHS camcorder HUD overlay with S-VHS badge, REC, tape remain, MF scale, zebra, camera readout, crosshair, and CH1/CH2 meters.
 - `hud/drone_mission_HUD_builder_RV_v1.jsx` - procedural survey/mission drone HUD overlay with mission progress, mapping panels, viewfinder frame, minimap, compass, battery, satellites, and area grid.
 - `hud/inspection_drone_HUD_builder_RV_v1.jsx` - procedural inspection drone HUD overlay with telemetry panels, central radar/attitude display, camera payload controls, obstacle avoidance, zoom, and signal histogram.
 
