@@ -19,17 +19,25 @@
     var CTRL_NAME = "HUD_CONTROL";
 
     var FONT_CANDIDATES = [
+        "SFProDisplay-Light",
         "SFProDisplay-Regular",
+        "SFProDisplay-Medium",
         "SF Pro Display",
+        "SFProText-Light",
         "SFProText-Regular",
         "SF Pro Text",
+        "HelveticaNeue-Light",
         "HelveticaNeue",
+        "HelveticaNeue-Medium",
         "Helvetica Neue",
-        "Consolas",
-        "Menlo-Regular",
-        "Monaco",
-        "CourierNewPSMT",
-        "Courier New",
+        "SegoeUI-Light",
+        "SegoeUI-Semilight",
+        "SegoeUI",
+        "Segoe UI Light",
+        "Segoe UI Semilight",
+        "Segoe UI",
+        "Aptos",
+        "AptosDisplay-Regular",
         "ArialMT",
         "Arial"
     ];
