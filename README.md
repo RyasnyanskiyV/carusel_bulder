@@ -20,6 +20,7 @@ Adobe After Effects ExtendScript tools for carousel rigs.
 - `hud/cinema_monitor_frame_HUD_builder_RV_v1.jsx` - cinema monitor frame preset without a reference image, with action/title safe areas, 2.39/1.85 guides, codec/timecode status, waveform, false color tools, and audio meters.
 - `hud/minimal_rec_frame_HUD_builder_RV_v1.jsx` - premium minimal REC frame preset without a reference image, with thin corner marks, subtle safe ticks, REC/timecode, compact format/battery status, and restrained bottom lens/media readout.
 - `hud/vlog_camera_frame_HUD_builder_RV_v1.jsx` - simple YouTube/vlog camera frame preset without a reference image, with friendly REC/timer, 4K status, face tracking box, mic meter, battery, stabilizer status, and compact bottom readout.
+- `hud/phone_camera_vertical_HUD_builder_RV_v1.jsx` - vertical phone camera preset for Reels/Shorts without a reference image, with 2160 x 3840 comp, phone status bar, 9:16 frame, face tracking, lens selector, mic meter, battery, and mobile record controls.
 
 ## Compatibility
 
