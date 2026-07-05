@@ -1308,10 +1308,14 @@
         for (var i = 0; i < labels.length; i++) {
             var y = y0 + (y1 - y0) * labels[i][1];
             addLineToContents(c, x - 42, y, x, y);
-            addText(comp, "HUD_mf_num_" + i, labels[i][0], 92, y + 13, 34, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 0, false);
         }
         addPolylineToContents(c, [[230, 786], [256, 764], [256, 808]], true);
         addStroke(c, COLOR_WHITE, 4, 100);
+
+        for (var j = 0; j < labels.length; j++) {
+            var labelY = y0 + (y1 - y0) * labels[j][1];
+            addText(comp, "HUD_mf_num_" + j, labels[j][0], 92, labelY + 13, 34, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 0, false);
+        }
 
         var pointer = makeShapeLayer(comp, "HUD_mf_pointer");
         var p = addGroup(pointer, "pointer");
@@ -1407,19 +1411,29 @@
     }
 
     function drawCanonAudioRow(layer, rowName, x, y) {
-        var green = addGroup(layer, rowName + "_green");
-        var yellow = addGroup(layer, rowName + "_yellow");
-        var red = addGroup(layer, rowName + "_red");
         var bars = 34;
         var bw = 10;
         var gap = 8;
-        for (var i = 0; i < bars; i++) {
+
+        var green = addGroup(layer, rowName + "_green");
+        for (var i = 0; i < 27; i++) {
             var bx = x + i * (bw + gap);
-            var target = i < 27 ? green : (i < 31 ? yellow : red);
-            addRectToContents(target, bx, y, bw, 30, 0);
+            addRectToContents(green, bx, y, bw, 30, 0);
         }
         addFill(green, COLOR_GREEN, 100);
+
+        var yellow = addGroup(layer, rowName + "_yellow");
+        for (var j = 27; j < 31; j++) {
+            var yx = x + j * (bw + gap);
+            addRectToContents(yellow, yx, y, bw, 30, 0);
+        }
         addFill(yellow, COLOR_YELLOW, 100);
+
+        var red = addGroup(layer, rowName + "_red");
+        for (var k = 31; k < bars; k++) {
+            var rx = x + k * (bw + gap);
+            addRectToContents(red, rx, y, bw, 30, 0);
+        }
         addFill(red, COLOR_RED, 100);
     }
 
