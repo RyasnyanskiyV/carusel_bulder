@@ -24,6 +24,7 @@ Adobe After Effects ExtendScript tools for carousel rigs.
 - `hud/drone_basic_HUD_builder_RV_v1.jsx` - basic drone HUD preset without a reference image, focused on altitude, speed, GPS lock, satellites, RC signal, battery, compass/heading, home distance, and a small flight path map.
 - `hud/drone_advanced_HUD_builder_RV_v1.jsx` - advanced drone telemetry HUD preset without a reference image, with expanded altitude/distance scales, GPS health, mission strip, payload status, obstacle arc, compass, map, and detailed flight readouts.
 - `hud/drone_target_lock_HUD_builder_RV_v1.jsx` - drone target lock HUD preset without a reference image, with active target brackets, range rings, lock confidence, motion vector, target range/speed/bearing, radar blip, and flight telemetry.
+- `hud/drone_map_interface_HUD_builder_RV_v1.jsx` - drone map interface HUD preset without a reference image, centered on a large mission map with route, waypoints, current path, GPS quality, coordinates, home distance, ETA, and navigation telemetry.
 
 ## Compatibility
 
