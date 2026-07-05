@@ -22,6 +22,7 @@ Adobe After Effects ExtendScript tools for carousel rigs.
 - `hud/vlog_camera_frame_HUD_builder_RV_v1.jsx` - simple YouTube/vlog camera frame preset without a reference image, with friendly REC/timer, 4K status, face tracking box, mic meter, battery, stabilizer status, and compact bottom readout.
 - `hud/phone_camera_vertical_HUD_builder_RV_v1.jsx` - vertical phone camera preset for Reels/Shorts without a reference image, with 2160 x 3840 comp, phone status bar, 9:16 frame, face tracking, lens selector, mic meter, battery, and mobile record controls.
 - `hud/drone_basic_HUD_builder_RV_v1.jsx` - basic drone HUD preset without a reference image, focused on altitude, speed, GPS lock, satellites, RC signal, battery, compass/heading, home distance, and a small flight path map.
+- `hud/drone_advanced_HUD_builder_RV_v1.jsx` - advanced drone telemetry HUD preset without a reference image, with expanded altitude/distance scales, GPS health, mission strip, payload status, obstacle arc, compass, map, and detailed flight readouts.
 
 ## Compatibility
 
