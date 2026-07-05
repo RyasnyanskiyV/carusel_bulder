@@ -16,6 +16,7 @@ Adobe After Effects ExtendScript tools for carousel rigs.
 - `hud/inspection_drone_HUD_builder_RV_v1.jsx` - procedural inspection drone HUD overlay with telemetry panels, central radar/attitude display, camera payload controls, obstacle avoidance, zoom, and signal histogram.
 - `hud/canon_c70_HUD_builder_RV_v1.jsx` - procedural Canon C70-style HUD overlay with codec row, REC/media status, MF scale, frame marks, waveform monitor, exposure strip, and CH1/CH2 meters.
 - `hud/clean_camera_viewfinder_HUD_builder_RV_v1.jsx` - universal clean camera viewfinder overlay without a reference image, with modern frame marks, REC/timecode, focus scale, exposure strip, audio meters, battery, histogram, and editable HUD controls.
+- `hud/dslr_camera_ui_HUD_builder_RV_v1.jsx` - DSLR camera UI preset without a reference image, focused on ISO, shutter speed, aperture, battery, AF points, EV scale, RAW/WB status, and remaining shots.
 
 ## Compatibility
 
