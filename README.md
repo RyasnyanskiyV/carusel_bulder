@@ -26,6 +26,7 @@ Adobe After Effects ExtendScript tools for carousel rigs.
 - `hud/drone_target_lock_HUD_builder_RV_v1.jsx` - drone target lock HUD preset without a reference image, with active target brackets, range rings, lock confidence, motion vector, target range/speed/bearing, radar blip, and flight telemetry.
 - `hud/drone_map_interface_HUD_builder_RV_v1.jsx` - drone map interface HUD preset without a reference image, centered on a large mission map with route, waypoints, current path, GPS quality, coordinates, home distance, ETA, and navigation telemetry.
 - `hud/drone_scan_frame_HUD_builder_RV_v1.jsx` - drone scan frame HUD preset without a reference image, with scanning grid, horizontal scan lines, scan window, detected object boxes, scan progress, range/quality readouts, and flight telemetry.
+- `hud/drone_night_vision_HUD_builder_RV_v1.jsx` - drone night vision HUD preset without a reference image, with green/white night mode mix, IR/gain status, target lock, thermal signature, scan grain, mini map, and night telemetry.
 
 ## Compatibility
 
