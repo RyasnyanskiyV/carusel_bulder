@@ -826,6 +826,168 @@
         drawBodycamFooter(comp);
     }
 
+    function drawBodycamV2Panel(comp, name, x, y, w, h, label, value, sub, color) {
+        var layer = makeShapeLayer(comp, name + "_panel_v2");
+        var c = addGroup(layer, "panel");
+        addRectToContents(c, x, y, w, h, 4);
+        addFill(c, COLOR_BLACK, 64);
+        addStroke(c, COLOR_WHITE, 3, 82);
+
+        var accent = addGroup(layer, "accent");
+        addLineToContents(accent, x, y + h, x + w, y + h);
+        addStroke(accent, color || COLOR_ACCENT, 5, 100);
+
+        addText(comp, name + "_label_v2", label, x + 26, y + 42, 28, COLOR_DIM, ParagraphJustification.LEFT_JUSTIFY, 8);
+        addText(comp, name + "_value_v2", value, x + 26, y + 104, 52, color || COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 4);
+        if (sub) addText(comp, name + "_sub_v2", sub, x + 26, y + h - 24, 24, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 4);
+    }
+
+    function drawBodycamV2Bands(comp) {
+        var layer = makeShapeLayer(comp, "HUD_bodycam_v2_bands");
+        var c = addGroup(layer, "top bottom service bands");
+        addRectToContents(c, 72, 72, 3696, 260, 0);
+        addRectToContents(c, 72, 1818, 3696, 270, 0);
+        addFill(c, COLOR_BLACK, 58);
+
+        var borders = addGroup(layer, "band borders");
+        addLineToContents(borders, 72, 332, 3768, 332);
+        addLineToContents(borders, 72, 1818, 3768, 1818);
+        addStroke(borders, COLOR_WHITE, 3, 62);
+    }
+
+    function drawBodycamV2Frame(comp) {
+        var layer = makeShapeLayer(comp, "HUD_bodycam_v2_frame");
+        var c = addGroup(layer, "heavy recorder frame");
+        addLineToContents(c, 110, 110, 760, 110);
+        addLineToContents(c, 110, 110, 110, 520);
+        addLineToContents(c, 3730, 110, 3080, 110);
+        addLineToContents(c, 3730, 110, 3730, 520);
+        addLineToContents(c, 110, 2050, 760, 2050);
+        addLineToContents(c, 110, 2050, 110, 1640);
+        addLineToContents(c, 3730, 2050, 3080, 2050);
+        addLineToContents(c, 3730, 2050, 3730, 1640);
+        addStroke(c, COLOR_WHITE, 6, 92);
+
+        var inner = addGroup(layer, "crooked inner frame");
+        addLineToContents(inner, 205, 430, 680, 430);
+        addLineToContents(inner, 205, 430, 205, 650);
+        addLineToContents(inner, 3635, 430, 3160, 430);
+        addLineToContents(inner, 3635, 430, 3635, 650);
+        addLineToContents(inner, 205, 1730, 680, 1730);
+        addLineToContents(inner, 205, 1730, 205, 1510);
+        addLineToContents(inner, 3635, 1730, 3160, 1730);
+        addLineToContents(inner, 3635, 1730, 3635, 1510);
+        addStroke(inner, COLOR_DIM, 3, 58);
+
+        var center = addGroup(layer, "rough center");
+        addLineToContents(center, 1815, 1080, 1890, 1080);
+        addLineToContents(center, 1950, 1080, 2025, 1080);
+        addLineToContents(center, 1920, 975, 1920, 1050);
+        addLineToContents(center, 1920, 1110, 1920, 1185);
+        addRectToContents(center, 1875, 1035, 90, 90, 0);
+        addStroke(center, COLOR_WHITE, 4, 76);
+    }
+
+    function drawBodycamV2Header(comp) {
+        var dot = makeShapeLayer(comp, "HUD_bodycam_v2_rec_dot");
+        var d = addGroup(dot, "rec dot");
+        addEllipseToContents(d, 162, 140, 70, 70);
+        addFill(d, COLOR_RED, 100);
+
+        addText(comp, "HUD_bodycam_v2_rec", "REC", 260, 204, 78, COLOR_RED, ParagraphJustification.LEFT_JUSTIFY, 10);
+        addText(comp, "HUD_bodycam_v2_timecode", "00:17:42", 160, 304, 112, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 2);
+        addText(comp, "HUD_bodycam_v2_date", "2026-07-05   18:24:09   UTC+07", 585, 304, 40, COLOR_DIM, ParagraphJustification.LEFT_JUSTIFY, 4);
+
+        addText(comp, "HUD_bodycam_v2_unit_label", "UNIT", 2460, 150, 30, COLOR_DIM, ParagraphJustification.LEFT_JUSTIFY, 8);
+        addText(comp, "HUD_bodycam_v2_unit", "BC-AX7-203", 2460, 220, 58, COLOR_ACCENT, ParagraphJustification.LEFT_JUSTIFY, 4);
+        addText(comp, "HUD_bodycam_v2_case_label", "CASE", 3070, 150, 30, COLOR_DIM, ParagraphJustification.LEFT_JUSTIFY, 8);
+        addText(comp, "HUD_bodycam_v2_case", "EV-2026-0719", 3070, 220, 58, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 4);
+        addText(comp, "HUD_bodycam_v2_buffer", "PRE-EVENT BUFFER 30s", 3070, 302, 32, COLOR_YELLOW, ParagraphJustification.LEFT_JUSTIFY, 6);
+    }
+
+    function drawBodycamV2Battery(comp) {
+        var layer = makeShapeLayer(comp, "HUD_bodycam_v2_battery");
+        var c = addGroup(layer, "battery");
+        addRectToContents(c, 3465, 272, 220, 70, 2);
+        addRectToContents(c, 3685, 294, 20, 26, 1);
+        addStroke(c, COLOR_WHITE, 4, 90);
+
+        var fill = addGroup(layer, "battery fill");
+        addRectToContents(fill, 3482, 289, 146, 36, 1);
+        addFill(fill, COLOR_GREEN, 100);
+        addText(comp, "HUD_bodycam_v2_battery_text", "74%", 3405, 329, 40, COLOR_GREEN, ParagraphJustification.RIGHT_JUSTIFY, 4);
+    }
+
+    function drawBodycamV2SidePanels(comp) {
+        drawBodycamV2Panel(comp, "HUD_bodycam_v2_gps", 160, 1440, 640, 145, "GPS LOCK", "13.7563 N / 100.5018 E", "ACCURACY 3.2m", COLOR_GREEN);
+        drawBodycamV2Panel(comp, "HUD_bodycam_v2_signal", 160, 1615, 640, 145, "NETWORK", "LTE  -72 dBm", "LIVE UPLOAD READY", COLOR_ACCENT);
+        drawBodycamV2Panel(comp, "HUD_bodycam_v2_storage", 160, 1790, 640, 145, "STORAGE", "128GB  41% USED", "LOCAL + CLOUD MIRROR", COLOR_WHITE);
+
+        drawBodycamV2Panel(comp, "HUD_bodycam_v2_officer", 3040, 1440, 640, 145, "OFFICER", "VR-204", "DISTRICT CENTRAL", COLOR_WHITE);
+        drawBodycamV2Panel(comp, "HUD_bodycam_v2_audio", 3040, 1615, 640, 145, "AUDIO", "MIC A+B  ACTIVE", "WIND FILTER ON", COLOR_ACCENT);
+        drawBodycamV2Panel(comp, "HUD_bodycam_v2_hash", 3040, 1790, 640, 145, "EVIDENCE", "HASH OK", "CHAIN VERIFIED", COLOR_GREEN);
+    }
+
+    function drawBodycamV2Audio(comp) {
+        addText(comp, "HUD_bodycam_v2_audio_title", "AUDIO LEVEL", 1210, 1918, 30, COLOR_DIM, ParagraphJustification.LEFT_JUSTIFY, 8);
+        addText(comp, "HUD_bodycam_v2_l", "L", 1210, 1990, 32, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 4);
+        addText(comp, "HUD_bodycam_v2_r", "R", 1210, 2042, 32, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 4);
+
+        var layer = makeShapeLayer(comp, "HUD_bodycam_v2_audio_bars");
+        var bars = addGroup(layer, "green bars");
+        for (var i = 0; i < 34; i++) {
+            var x = 1280 + i * 28;
+            addRectToContents(bars, x, 1964, 16, 32, 0);
+            addRectToContents(bars, x, 2016, 16, 32, 0);
+        }
+        addFill(bars, COLOR_GREEN, 92);
+
+        var hot = addGroup(layer, "hot bars");
+        for (var j = 27; j < 34; j++) {
+            var hx = 1280 + j * 28;
+            addRectToContents(hot, hx, 1964, 16, 32, 0);
+            addRectToContents(hot, hx, 2016, 16, 32, 0);
+        }
+        addFill(hot, COLOR_YELLOW, 95);
+    }
+
+    function drawBodycamV2Distortion(comp) {
+        var layer = makeShapeLayer(comp, "HUD_bodycam_v2_distortion");
+        var scan = addGroup(layer, "scanline breaks");
+        for (var i = 0; i < 20; i++) {
+            var y = 520 + i * 56;
+            addLineToContents(scan, 270 + ((i * 167) % 360), y, 520 + ((i * 191) % 420), y);
+            addLineToContents(scan, 2970 + ((i * 131) % 320), y + 18, 3220 + ((i * 151) % 380), y + 18);
+        }
+        addStroke(scan, COLOR_WHITE, 2, 35);
+
+        var specks = addGroup(layer, "larger sensor grit");
+        for (var k = 0; k < 42; k++) {
+            var nx = 520 + ((k * 271) % 2780);
+            var ny = 520 + ((k * 193) % 900);
+            var s = 5 + (k % 4);
+            addRectToContents(specks, nx, ny, s, s, 0);
+        }
+        addFill(specks, COLOR_WHITE, 22);
+    }
+
+    function drawBodycamV2Footer(comp) {
+        addText(comp, "HUD_bodycam_v2_center_label", "AXON-LIKE DOCUMENTARY BODY CAMERA / WIDE 146 DEG / AUTO EXP", 1920, 1268, 34, COLOR_DIM, ParagraphJustification.CENTER_JUSTIFY, 8);
+        addText(comp, "HUD_bodycam_v2_footer_left", "OFFICER VR-204     BADGE 0187     DISTRICT CENTRAL", 160, 2070, 34, COLOR_WHITE, ParagraphJustification.LEFT_JUSTIFY, 4);
+        addText(comp, "HUD_bodycam_v2_footer_right", "GPS LOCK     EVIDENCE SYNCED     STREAM ACTIVE", 3680, 2070, 34, COLOR_GREEN, ParagraphJustification.RIGHT_JUSTIFY, 4);
+    }
+
+    function drawBodycamFrameHUDV2(comp) {
+        drawBodycamV2Bands(comp);
+        drawBodycamV2Frame(comp);
+        drawBodycamV2Header(comp);
+        drawBodycamV2Battery(comp);
+        drawBodycamV2Distortion(comp);
+        drawBodycamV2SidePanels(comp);
+        drawBodycamV2Audio(comp);
+        drawBodycamV2Footer(comp);
+    }
+
     if (!app.project) app.newProject();
     app.beginUndoGroup("Bodycam Frame HUD Builder RV v1");
     try {
@@ -840,7 +1002,7 @@
         comp.bgColor = COLOR_BLACK;
 
         var ctrl = addHUDController(comp);
-        drawBodycamFrameHUD(comp);
+        drawBodycamFrameHUDV2(comp);
         try {
             ctrl.moveToBeginning();
         } catch (ignored) {
